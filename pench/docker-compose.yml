@@ -1,0 +1,77 @@
+services:
+     scraper:
+          build: .
+          restart: unless-stopped
+          network_mode: host
+          env_file:
+               - .env
+          volumes:
+               - ${HOME}/.ssh/ovh_vm:/root/.ssh/ovh_vm:ro
+               - ./src/pench/config/proxy_pools:/app/src/pench/config/proxy_pools:ro
+          deploy:
+               replicas: 18
+               resources:
+                    limits:
+                         memory: 1G
+                    reservations:
+                         memory: 256M
+     pg:
+          build: .
+          restart: unless-stopped
+          env_file:
+               - .env
+          command: ["uv", "run", "pg"]
+          deploy:
+               resources:
+                    limits:
+                         memory: 1G
+                    reservations:
+                         memory: 256M
+
+     pg-dashboard:
+          build: .
+          restart: unless-stopped
+          env_file:
+               - .env
+          command: ["uv", "run", "pg-dashboard"]
+          ports:
+               - "8000:8000"
+          deploy:
+               resources:
+                    limits:
+                         memory: 512M
+                    reservations:
+                         memory: 256M
+
+     scrape-dashboard:
+          build: .
+          restart: unless-stopped
+          env_file:
+               - .env
+          command: ["uv", "run", "scrape-dashboard"]
+          ports:
+               - "8005:8501"
+          deploy:
+               resources:
+                    limits:
+                         memory: 1G
+                    reservations:
+                         memory: 256M
+
+     telegram-listener:
+          build: .
+          restart: unless-stopped
+          env_file:
+               - .env
+          command: ["uv", "run", "telegram-listen"]
+          volumes:
+               - telegram-data:/app/src/pench/telegram_listener/data
+          deploy:
+               resources:
+                    limits:
+                         memory: 512M
+                    reservations:
+                         memory: 128M
+
+volumes:
+     telegram-data:

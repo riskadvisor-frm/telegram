@@ -1,0 +1,32 @@
+[project]
+name = "pench"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "flask>=3.1.2",
+    "google-cloud-storage>=3.7.0",
+    "matplotlib>=3.10.8",
+    "numpy",
+    "openai>=2.14.0",
+    "opencv-python-headless>=4.12.0.88",
+    "playwright>=1.57.0",
+    "plotly>=6.5.2",
+    "pycryptodome>=3.23.0",
+    "pydantic>=2.12.5",
+    "python-dotenv>=1.2.1",
+    "streamlit>=1.53.1",
+    "supabase>=2.25.1",
+    "telethon>=1.42.0",
+]
+
+[project.scripts]
+pg = "pench.payment_gateways.main:main"
+pg-dashboard = "pench.payment_gateways.dashboard:main"
+scrape = "pench.scrapers.main:main"
+scrape-dashboard = "pench.scrapers.sites.dashboard:main"
+telegram-listen = "pench.telegram_listener.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
